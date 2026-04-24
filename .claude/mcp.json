@@ -1,0 +1,43 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "gh",
+      "args": ["api"],
+      "env": {
+        "GH_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  },
+  "permissions": {
+    "read": [
+      "files",
+      "issues",
+      "pullRequests",
+      "commits",
+      "branches",
+      "workflows"
+    ],
+    "write": [
+      "files",
+      "issues",
+      "pullRequests",
+      "branches",
+      "commits"
+    ]
+  },
+  "repository": {
+    "owner": "ash-fluid",
+    "name": "wave2.0",
+    "defaultBranch": "main"
+  },
+  "claude": {
+    "accessLevel": "readWrite",
+    "capabilities": [
+      "readRepository",
+      "writeRepository",
+      "managePullRequests",
+      "manageIssues",
+      "viewWorkflows"
+    ]
+  }
+}
