@@ -80,11 +80,11 @@
   }
   .wave-logo { display: flex; align-items: center; gap: 8px; }
   .wave-logo .logo-mark {
-    width: 32px; height: 32px; border-radius: 8px;
-    background: none;
+    width: 32px; height: 32px; border-radius: 10px;
+    background: linear-gradient(135deg, #0EA5E9, #6366F1);
     display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
   }
+  .wave-logo .logo-mark svg { fill: white; }
   .wave-logo span { color: #fff; font-size: 20px; font-weight: 700; letter-spacing: -.5px; }
   .app-bar-action {
     width: 36px; height: 36px; border-radius: 50%;
@@ -157,6 +157,13 @@
   }
   .section-title { color: #F1F5F9; font-size: 17px; font-weight: 600; }
   .section-action { color: #0EA5E9; font-size: 13px; font-weight: 500; background: none; border: none; cursor: pointer; }
+  .section-action.pill {
+    background: rgba(14,165,233,.12);
+    border: 1px solid rgba(14,165,233,.25);
+    padding: 5px 12px; border-radius: 8px;
+    transition: opacity .15s;
+  }
+  .section-action.pill:active { opacity: .8; }
 
   /* ── Metric Cards ── */
   .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
@@ -201,6 +208,8 @@
   .record-icon.blue { background: rgba(14,165,233,.15); }
   .record-icon.green { background: rgba(16,185,129,.15); }
   .record-icon.amber { background: rgba(245,158,11,.15); }
+  .record-icon.rose { background: rgba(244,63,94,.15); }
+  .record-icon.purple { background: rgba(139,92,246,.15); }
   .record-body { flex: 1; min-width: 0; }
   .record-name { color: #E2E8F0; font-size: 14px; font-weight: 500; }
   .record-meta { color: #64748B; font-size: 12px; margin-top: 2px; }
@@ -225,6 +234,66 @@
   .ua-val { font-size: 13px; font-weight: 700; margin-top: 2px; }
   .ua-val.normal { color: #34D399; }
   .ua-val.trace { color: #FCD34D; }
+
+  /* ── Connected Devices ── */
+  @keyframes syncPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(14,165,233,0); }
+    50% { box-shadow: 0 0 0 3px rgba(14,165,233,.35); }
+  }
+  .metric-card.just-synced { animation: syncPulse 1s ease-in-out 2; border-color: rgba(14,165,233,.5); }
+
+  .sync-toast {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.25);
+    color: #34D399; font-size: 12px; font-weight: 500;
+    padding: 0 12px; border-radius: 10px;
+    margin: 0; max-height: 0; overflow: hidden;
+    opacity: 0; pointer-events: none;
+    transition: max-height .25s ease, opacity .2s ease, padding .25s ease, margin .25s ease;
+  }
+  .sync-toast.show { max-height: 40px; opacity: 1; padding: 8px 12px; margin: 0 0 8px; }
+
+  /* Device Sync Sheet */
+  .ds-row {
+    display: flex; align-items: center; gap: 12px;
+    background: #0F1829;
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: border-color .25s;
+  }
+  .ds-row.syncing { border-color: rgba(14,165,233,.4); }
+  .ds-row.synced { border-color: rgba(16,185,129,.35); }
+  .ds-row-body { flex: 1; min-width: 0; }
+  .ds-row-name { color: #E2E8F0; font-size: 14px; font-weight: 500; }
+  .ds-row-meta { color: #64748B; font-size: 12px; margin-top: 2px; }
+  .ds-check {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .2s, border-color .2s;
+  }
+  .ds-check.checked { background: linear-gradient(135deg,#0EA5E9,#6366F1); border-color: transparent; }
+  .ds-check.spinning { border: 2px solid rgba(14,165,233,.2); border-top-color: #0EA5E9; animation: spin .7s linear infinite; background: none; }
+
+  .ds-btn-row { margin-top: 10px; }
+  .ds-sync-all-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #0EA5E9, #6366F1);
+    border: none; border-radius: 14px; cursor: pointer;
+    color: #fff; font-size: 15px; font-weight: 600;
+    transition: opacity .15s;
+  }
+  .ds-sync-all-btn:active { opacity: .85; }
+  .ds-sync-selected-btn {
+    width: 100%; padding: 12px; margin-top: 8px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 14px; cursor: pointer;
+    color: #94A3B8; font-size: 13px; font-weight: 500;
+  }
+  .ds-sync-selected-btn:disabled { opacity: .4; cursor: default; }
 
   /* ── Documents Tab ── */
   .upload-btn {
@@ -489,13 +558,13 @@
     padding-top: 60px; margin-bottom: 40px;
   }
   .login-logo-mark {
-    width: 72px; height: 72px; border-radius: 16px;
-    background: none;
+    width: 72px; height: 72px; border-radius: 22px;
+    background: linear-gradient(135deg, #0EA5E9, #6366F1);
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 16px;
-    box-shadow: 0 16px 48px rgba(0,50,115,.4);
-    overflow: hidden;
+    box-shadow: 0 16px 48px rgba(14,165,233,.3);
   }
+  .login-logo-mark svg { stroke: white; }
   .login-app-name { color: #F1F5F9; font-size: 32px; font-weight: 700; letter-spacing: -1px; }
   .login-tagline { color: #64748B; font-size: 14px; margin-top: 6px; text-align: center; }
 
@@ -599,6 +668,7 @@
 
   /* Section headers */
   body.light .section-title { color: #0F172A; }
+  body.light .section-action.pill { background: rgba(14,165,233,.08); border-color: rgba(14,165,233,.2); }
 
   /* Metric cards */
   body.light .metric-card {
@@ -660,6 +730,11 @@
   body.light .success-title { color: #0F172A; }
   body.light .success-sub { color: #475569; }
   body.light .done-btn { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.1); color: #475569; }
+  body.light .ds-row { background: #FFFFFF; border-color: rgba(0,0,0,.07); }
+  body.light .ds-row-name { color: #1E293B; }
+  body.light .ds-row-meta { color: #64748B; }
+  body.light .ds-check { border-color: rgba(0,0,0,.15); }
+  body.light .ds-sync-selected-btn { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.1); color: #475569; }
 
   /* AI Query tab */
   body.light .ai-disclaimer { background: rgba(99,102,241,.06); border-color: rgba(99,102,241,.2); }
@@ -1844,305 +1919,11 @@
   body.light .pcos-factor-track { background: rgba(0,0,0,.08); }
   body.light .pcos-result-back { background: rgba(0,0,0,.05); border-color: rgba(0,0,0,.1); }
 
-
-  /* ══════════════════════════════════════════
-     PROFILE SCREEN
-  ══════════════════════════════════════════ */
-  #profileScreen {
-    position: absolute;
-    inset: 0;
-    background: #0F172A;
-    z-index: 75;
-    display: flex;
-    flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-    overflow: hidden;
-  }
-  #profileScreen.open { transform: translateX(0); }
-  body.light #profileScreen { background: #F8FAFC; }
-
-  .profile-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 20px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
-    flex-shrink: 0;
-  }
-  body.light .profile-header { border-bottom-color: rgba(0,0,0,0.08); }
-
-  .profile-back {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-    border: none; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  body.light .profile-back { background: rgba(0,0,0,0.06); }
-  .profile-back svg { stroke: #94A3B8; }
-  body.light .profile-back svg { stroke: #64748B; }
-
-  .profile-title {
-    font-size: 17px; font-weight: 600; color: #F1F5F9; flex: 1;
-  }
-  body.light .profile-title { color: #1E293B; }
-
-  .profile-save-btn {
-    font-size: 13px; font-weight: 600; color: #38BDF8;
-    background: none; border: none; cursor: pointer; padding: 6px 4px;
-  }
-  body.light .profile-save-btn { color: #0EA5E9; }
-
-  /* Avatar in app bar */
-  .profile-avatar-btn {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: linear-gradient(135deg, #6366F1, #0EA5E9);
-    border: 2px solid rgba(255,255,255,0.15);
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; color: #fff;
-    overflow: hidden; flex-shrink: 0;
-    position: relative;
-    padding: 0;
-  }
-  .profile-avatar-btn img {
-    width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
-    display: none;
-  }
-  .profile-avatar-btn img.loaded { display: block; }
-  body.light .profile-avatar-btn { border-color: rgba(0,0,0,0.12); }
-
-  /* Big avatar in profile */
-  .profile-big-avatar {
-    width: 80px; height: 80px; border-radius: 50%;
-    background: linear-gradient(135deg, #6366F1, #0EA5E9);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; font-weight: 700; color: #fff;
-    margin: 0 auto 8px;
-    overflow: hidden; cursor: pointer; position: relative;
-  }
-  .profile-big-avatar img {
-    width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
-    display: none;
-  }
-  .profile-big-avatar img.loaded { display: block; }
-  .profile-change-photo {
-    font-size: 12px; color: #38BDF8; text-align: center;
-    margin-bottom: 20px; cursor: pointer;
-  }
-  body.light .profile-change-photo { color: #0EA5E9; }
-  #profilePhotoInput { display: none; }
-
-  /* Scrollable body */
-  .profile-body {
-    flex: 1; overflow-y: auto; padding: 0 20px 32px;
-  }
-  .profile-body::-webkit-scrollbar { display: none; }
-
-  /* Section headers */
-  .profile-section-label {
-    font-size: 11px; font-weight: 600; color: #64748B;
-    text-transform: uppercase; letter-spacing: 0.08em;
-    margin: 20px 0 10px;
-  }
-
-  /* Form fields */
-  .profile-field {
-    margin-bottom: 12px;
-  }
-  .profile-field label {
-    font-size: 11px; color: #64748B; display: block; margin-bottom: 4px;
-  }
-  .profile-field input,
-  .profile-field select {
-    width: 100%; padding: 10px 12px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px;
-    color: #F1F5F9; font-size: 14px;
-    outline: none; box-sizing: border-box;
-    -webkit-appearance: none;
-  }
-  body.light .profile-field input,
-  body.light .profile-field select {
-    background: #fff;
-    border-color: #E2E8F0;
-    color: #1E293B;
-  }
-  .profile-field input:focus,
-  .profile-field select:focus {
-    border-color: #38BDF8;
-  }
-  .profile-field select option { background: #1E293B; color: #F1F5F9; }
-  body.light .profile-field select option { background: #fff; color: #1E293B; }
-
-  .profile-two-col {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-  }
-
-  /* Allergy chips */
-  .allergy-chips {
-    display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;
-  }
-  .allergy-chip {
-    display: flex; align-items: center; gap: 5px;
-    background: rgba(239,68,68,0.15);
-    border: 1px solid rgba(239,68,68,0.3);
-    border-radius: 20px; padding: 4px 10px;
-    font-size: 12px; color: #FCA5A5;
-  }
-  body.light .allergy-chip { background: #FEF2F2; border-color: #FECACA; color: #DC2626; }
-  .allergy-chip-x {
-    background: none; border: none; cursor: pointer;
-    color: #F87171; font-size: 14px; line-height: 1; padding: 0;
-  }
-  .allergy-add-row {
-    display: flex; gap: 8px;
-  }
-  .allergy-add-input {
-    flex: 1; padding: 8px 12px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; color: #F1F5F9; font-size: 13px; outline: none;
-  }
-  body.light .allergy-add-input {
-    background: #fff; border-color: #E2E8F0; color: #1E293B;
-  }
-  .allergy-add-btn {
-    padding: 8px 14px; border-radius: 10px;
-    background: rgba(56,189,248,0.15); border: 1px solid rgba(56,189,248,0.3);
-    color: #38BDF8; font-size: 13px; font-weight: 600; cursor: pointer;
-  }
-  body.light .allergy-add-btn { background: #EFF6FF; border-color: #BFDBFE; color: #2563EB; }
-
-  /* ── Medical History Wizard ── */
-  .history-wizard {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 16px; overflow: hidden;
-  }
-  body.light .history-wizard {
-    background: #fff; border-color: #E2E8F0;
-  }
-  .history-steps-bar {
-    display: flex; padding: 12px 16px; gap: 6px;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-    flex-shrink: 0;
-  }
-  body.light .history-steps-bar { border-bottom-color: #F1F5F9; }
-  .history-step-dot {
-    flex: 1; height: 3px; border-radius: 2px;
-    background: rgba(255,255,255,0.12); transition: background 0.3s;
-  }
-  body.light .history-step-dot { background: #E2E8F0; }
-  .history-step-dot.active { background: #38BDF8; }
-  body.light .history-step-dot.active { background: #0EA5E9; }
-  .history-step-dot.done { background: #10B981; }
-
-  .history-slides { display: flex; transition: transform 0.35s ease; }
-  .history-slide {
-    min-width: 100%; padding: 16px;
-    box-sizing: border-box;
-  }
-  .history-slide-title {
-    font-size: 13px; font-weight: 700; color: #CBD5E1; margin-bottom: 12px;
-  }
-  body.light .history-slide-title { color: #475569; }
-
-  .history-q { margin-bottom: 14px; }
-  .history-q label {
-    font-size: 12px; color: #94A3B8; display: block; margin-bottom: 6px;
-  }
-  body.light .history-q label { color: #64748B; }
-  .history-q textarea {
-    width: 100%; padding: 9px 11px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; color: #F1F5F9; font-size: 13px;
-    resize: none; outline: none; box-sizing: border-box;
-    font-family: inherit; min-height: 72px;
-  }
-  body.light .history-q textarea {
-    background: #F8FAFC; border-color: #E2E8F0; color: #1E293B;
-  }
-  .history-q textarea:focus { border-color: #38BDF8; }
-
-  .history-checkbox-group { display: flex; flex-direction: column; gap: 8px; }
-  .history-checkbox-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 12px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 10px; cursor: pointer;
-  }
-  body.light .history-checkbox-item { background: #F8FAFC; border-color: #E2E8F0; }
-  .history-checkbox-item input[type=checkbox] { display: none; }
-  .history-checkbox-box {
-    width: 18px; height: 18px; border-radius: 5px;
-    border: 2px solid rgba(255,255,255,0.2);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all 0.2s;
-  }
-  body.light .history-checkbox-box { border-color: #CBD5E1; }
-  .history-checkbox-item.checked .history-checkbox-box {
-    background: #38BDF8; border-color: #38BDF8;
-  }
-  .history-checkbox-box::after {
-    content: ''; width: 10px; height: 6px;
-    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
-    transform: rotate(-45deg) translateY(-1px);
-    display: none;
-  }
-  .history-checkbox-item.checked .history-checkbox-box::after { display: block; }
-  .history-checkbox-label { font-size: 13px; color: #CBD5E1; }
-  body.light .history-checkbox-label { color: #475569; }
-
-  .history-nav {
-    display: flex; gap: 10px; padding: 12px 16px;
-    border-top: 1px solid rgba(255,255,255,0.06);
-  }
-  body.light .history-nav { border-top-color: #F1F5F9; }
-  .history-prev-btn {
-    padding: 9px 18px; border-radius: 10px;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    color: #94A3B8; font-size: 13px; font-weight: 600; cursor: pointer;
-  }
-  body.light .history-prev-btn { background: #F1F5F9; border-color: #E2E8F0; color: #64748B; }
-  .history-next-btn {
-    flex: 1; padding: 9px 0; border-radius: 10px;
-    background: linear-gradient(135deg, #0EA5E9, #6366F1);
-    border: none; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;
-  }
-
-  /* Review step */
-  .history-review-item {
-    padding: 10px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  body.light .history-review-item { border-bottom-color: #F1F5F9; }
-  .history-review-item:last-child { border-bottom: none; }
-  .history-review-key {
-    font-size: 11px; font-weight: 600; color: #64748B;
-    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px;
-  }
-  .history-review-val { font-size: 13px; color: #CBD5E1; }
-  body.light .history-review-val { color: #475569; }
-
-  /* Save toast */
-  #profileToast {
-    position: absolute; bottom: 90px; left: 50%; transform: translateX(-50%);
-    background: #10B981; color: #fff; font-size: 13px; font-weight: 600;
-    padding: 9px 22px; border-radius: 20px; white-space: nowrap;
-    opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200;
-  }
-  #profileToast.show { opacity: 1; }
-
 </style>
 </head>
 <body class="light">
 
-<p class="proto-label">Oria &middot; Interactive Prototype &middot; V2.4</p>
+<p class="proto-label">Oria &middot; Interactive Prototype &middot; V2.3</p>
 
 <div class="phone" id="phone">
 
@@ -2250,10 +2031,6 @@
       </button>
       <button class="app-bar-action">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-      </button>
-      <button class="profile-avatar-btn" id="profileAvatarBtn" onclick="openProfile()" title="My Profile">
-        <img id="profileAvatarImg" src="" alt="">
-        <span id="profileAvatarInitials">ME</span>
       </button>
     </div>
   </div>
@@ -2553,10 +2330,10 @@
       </div>
 
       <div class="metric-grid">
-        <div class="metric-card blue" onclick="openMetricSheet('steps')" style="cursor:pointer">
+        <div class="metric-card blue" id="metricCard-steps" onclick="openMetricSheet('steps')" style="cursor:pointer">
           <div class="metric-label">Steps <span style="font-size:9px;opacity:.5;margin-left:3px">▶ Details</span></div>
-          <div class="metric-value">8,432</div>
-          <div class="metric-delta up">&#8593; 12% vs yesterday</div>
+          <div class="metric-value" id="metricVal-steps">8,432</div>
+          <div class="metric-delta up" id="metricDelta-steps">&#8593; 12% vs yesterday</div>
           <div class="metric-chart">
             <svg viewBox="0 0 100 36" preserveAspectRatio="none">
               <defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#0EA5E9" stop-opacity=".3"/><stop offset="100%" stop-color="#0EA5E9" stop-opacity="0"/></linearGradient></defs>
@@ -2565,9 +2342,9 @@
             </svg>
           </div>
         </div>
-        <div class="metric-card rose" onclick="openMetricSheet('heartrate')" style="cursor:pointer">
+        <div class="metric-card rose" id="metricCard-hr" onclick="openMetricSheet('heartrate')" style="cursor:pointer">
           <div class="metric-label">Heart Rate <span style="font-size:9px;opacity:.5;margin-left:3px">▶ Details</span></div>
-          <div class="metric-value">68 <span class="metric-unit">bpm</span></div>
+          <div class="metric-value" id="metricVal-hr">68 <span class="metric-unit">bpm</span></div>
           <div class="metric-delta neutral">Normal range</div>
           <div class="metric-chart">
             <svg viewBox="0 0 100 36" preserveAspectRatio="none">
@@ -2577,9 +2354,9 @@
             </svg>
           </div>
         </div>
-        <div class="metric-card purple">
+        <div class="metric-card purple" id="metricCard-sleep">
           <div class="metric-label">Sleep</div>
-          <div class="metric-value">7<span class="metric-unit">h</span> 24<span class="metric-unit">m</span></div>
+          <div class="metric-value" id="metricVal-sleep">7<span class="metric-unit">h</span> 24<span class="metric-unit">m</span></div>
           <div class="metric-delta up">&#8593; 34 min more</div>
           <div class="metric-chart">
             <svg viewBox="0 0 100 36" preserveAspectRatio="none">
@@ -2589,9 +2366,9 @@
             </svg>
           </div>
         </div>
-        <div class="metric-card green">
+        <div class="metric-card green" id="metricCard-bp">
           <div class="metric-label">Blood Pressure</div>
-          <div class="metric-value">118<span class="metric-unit">/76</span></div>
+          <div class="metric-value" id="metricVal-bp">118<span class="metric-unit">/76</span></div>
           <div class="metric-delta up">&#8595; Improved</div>
           <div class="metric-chart">
             <svg viewBox="0 0 100 36" preserveAspectRatio="none">
@@ -2604,8 +2381,62 @@
       </div>
 
       <div class="section-header">
+        <span class="section-title">Connected Devices</span>
+        <button class="section-action pill" onclick="openDeviceSheet()">Sync</button>
+      </div>
+
+      <div class="sync-toast" id="syncToast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="syncToastText">Synced 4 devices &middot; just now</span>
+      </div>
+
+      <div class="record-item">
+        <div class="record-icon rose">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FB7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.6z"/></svg>
+        </div>
+        <div class="record-body">
+          <div class="record-name">Apple Health</div>
+          <div class="record-meta" id="devMeta-applehealth">Synced 2h ago</div>
+        </div>
+        <span class="record-badge badge-normal" id="devBadge-applehealth">Synced</span>
+      </div>
+
+      <div class="record-item">
+        <div class="record-icon green">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 2.5c-2.2 3.8-5.8 5.3-5.8 9.8a5.8 5.8 0 0011.6 0c0-1.3-.4-2.3-.9-3.2.4 2.6-1.3 3.6-2.2 1.9-.9-1.8.4-2.9.4-5.1-.9.9-1.8 1.9-1.8 3.3.1-2.4-1.9-3.9-1.3-6.7z"/></svg>
+        </div>
+        <div class="record-body">
+          <div class="record-name">Fitbit</div>
+          <div class="record-meta" id="devMeta-fitbit">Synced 5h ago</div>
+        </div>
+        <span class="record-badge badge-normal" id="devBadge-fitbit">Synced</span>
+      </div>
+
+      <div class="record-item">
+        <div class="record-icon purple">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/></svg>
+        </div>
+        <div class="record-body">
+          <div class="record-name">Oura Ring</div>
+          <div class="record-meta" id="devMeta-oura">Synced yesterday</div>
+        </div>
+        <span class="record-badge badge-normal" id="devBadge-oura">Synced</span>
+      </div>
+
+      <div class="record-item">
+        <div class="record-icon amber">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="4"/><rect x="9.3" y="9.2" width="5.4" height="5.6" rx="1.4"/></svg>
+        </div>
+        <div class="record-body">
+          <div class="record-name">Whoop</div>
+          <div class="record-meta" id="devMeta-whoop">Not yet synced</div>
+        </div>
+        <span class="record-badge badge-review" id="devBadge-whoop">Sync needed</span>
+      </div>
+
+      <div class="section-header">
         <span class="section-title">Recent Records</span>
-        <button class="section-action">See all</button>
+        <button class="section-action pill">See all</button>
       </div>
 
       <div class="record-item">
@@ -3261,6 +3092,80 @@
             </div>
           </div>
           <button class="done-btn" onclick="closeSheet()">Done</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Device Sync Sheet -->
+  <div class="sheet-overlay" id="deviceSheetOverlay" onclick="deviceOverlayClick(event)">
+    <div class="sheet" id="deviceSheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title" id="dsTitle">Sync Devices</div>
+      <div class="sheet-subtitle" id="dsSub">Select devices to sync with Oria</div>
+      <div class="sheet-body">
+
+        <div class="phase active" id="dsphase-select">
+          <div class="ds-row" id="dsRow-applehealth" onclick="toggleDevice('applehealth')">
+            <div class="record-icon rose">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FB7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 000-7.6z"/></svg>
+            </div>
+            <div class="ds-row-body">
+              <div class="ds-row-name">Apple Health</div>
+              <div class="ds-row-meta" id="dsMeta-applehealth">Synced 2h ago</div>
+            </div>
+            <div class="ds-check checked" id="dsCheck-applehealth"></div>
+          </div>
+
+          <div class="ds-row" id="dsRow-fitbit" onclick="toggleDevice('fitbit')">
+            <div class="record-icon green">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 2.5c-2.2 3.8-5.8 5.3-5.8 9.8a5.8 5.8 0 0011.6 0c0-1.3-.4-2.3-.9-3.2.4 2.6-1.3 3.6-2.2 1.9-.9-1.8.4-2.9.4-5.1-.9.9-1.8 1.9-1.8 3.3.1-2.4-1.9-3.9-1.3-6.7z"/></svg>
+            </div>
+            <div class="ds-row-body">
+              <div class="ds-row-name">Fitbit</div>
+              <div class="ds-row-meta" id="dsMeta-fitbit">Synced 5h ago</div>
+            </div>
+            <div class="ds-check checked" id="dsCheck-fitbit"></div>
+          </div>
+
+          <div class="ds-row" id="dsRow-oura" onclick="toggleDevice('oura')">
+            <div class="record-icon purple">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2"/></svg>
+            </div>
+            <div class="ds-row-body">
+              <div class="ds-row-name">Oura Ring</div>
+              <div class="ds-row-meta" id="dsMeta-oura">Synced yesterday</div>
+            </div>
+            <div class="ds-check checked" id="dsCheck-oura"></div>
+          </div>
+
+          <div class="ds-row" id="dsRow-whoop" onclick="toggleDevice('whoop')">
+            <div class="record-icon amber">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="3" width="10" height="18" rx="4"/><rect x="9.3" y="9.2" width="5.4" height="5.6" rx="1.4"/></svg>
+            </div>
+            <div class="ds-row-body">
+              <div class="ds-row-name">Whoop</div>
+              <div class="ds-row-meta" id="dsMeta-whoop">Not yet synced</div>
+            </div>
+            <div class="ds-check checked" id="dsCheck-whoop"></div>
+          </div>
+
+          <div class="ds-btn-row" id="dsBtnRow">
+            <button class="ds-sync-all-btn" onclick="startDeviceSync(true)">Sync All Devices</button>
+            <button class="ds-sync-selected-btn" id="dsSyncSelectedBtn" onclick="startDeviceSync(false)">Sync Selected (4)</button>
+          </div>
+        </div>
+
+        <div class="phase" id="dsphase-success">
+          <div class="success-wrap">
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="success-title">All Set</div>
+            <div class="success-sub" id="dsSuccessSub">4 devices synced successfully. Your dashboard has been updated with the latest data.</div>
+          </div>
+          <button class="done-btn" onclick="finishDeviceSync()">Done</button>
         </div>
 
       </div>
@@ -4150,301 +4055,6 @@
     </div>
   </div><!-- /pcosResults -->
 
-
-<!-- ═══════════════════════════════════════════════════
-     PROFILE SCREEN
-═══════════════════════════════════════════════════ -->
-<div id="profileScreen">
-
-  <!-- Header -->
-  <div class="profile-header">
-    <button class="profile-back" onclick="closeProfile()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <span class="profile-title">My Profile</span>
-    <button class="profile-save-btn" onclick="saveProfile()">Save</button>
-  </div>
-
-  <!-- Scrollable body -->
-  <div class="profile-body">
-
-    <!-- Avatar -->
-    <div style="text-align:center;padding:20px 0 4px">
-      <div class="profile-big-avatar" id="profileBigAvatar" onclick="document.getElementById('profilePhotoInput').click()">
-        <img id="profileBigImg" src="" alt="">
-        <span id="profileBigInitials">ME</span>
-      </div>
-    </div>
-    <div class="profile-change-photo" onclick="document.getElementById('profilePhotoInput').click()">Change Photo</div>
-    <input type="file" id="profilePhotoInput" accept="image/*" onchange="handleProfilePhoto(this)">
-
-    <!-- Personal Details -->
-    <div class="profile-section-label">Personal Details</div>
-
-    <div class="profile-field">
-      <label>Full Name</label>
-      <input type="text" id="pf-name" placeholder="e.g. Sarah Johnson">
-    </div>
-
-    <div class="profile-two-col">
-      <div class="profile-field">
-        <label>Date of Birth</label>
-        <input type="date" id="pf-dob">
-      </div>
-      <div class="profile-field">
-        <label>Gender</label>
-        <select id="pf-gender">
-          <option value="">Select…</option>
-          <option>Female</option>
-          <option>Male</option>
-          <option>Non-binary</option>
-          <option>Prefer not to say</option>
-          <option>Other</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Contact -->
-    <div class="profile-section-label">Contact</div>
-
-    <div class="profile-field">
-      <label>Email</label>
-      <input type="email" id="pf-email" placeholder="you@example.com">
-    </div>
-    <div class="profile-field">
-      <label>Phone</label>
-      <input type="tel" id="pf-phone" placeholder="+1 (555) 000-0000">
-    </div>
-    <div class="profile-field">
-      <label>Address</label>
-      <input type="text" id="pf-address" placeholder="Street address">
-    </div>
-    <div class="profile-two-col">
-      <div class="profile-field">
-        <label>City</label>
-        <input type="text" id="pf-city" placeholder="City">
-      </div>
-      <div class="profile-field">
-        <label>Postal / Zip</label>
-        <input type="text" id="pf-postal" placeholder="A1B 2C3">
-      </div>
-    </div>
-
-    <!-- Allergies -->
-    <div class="profile-section-label">Allergies &amp; Sensitivities</div>
-    <div class="allergy-chips" id="allergyChips"></div>
-    <div class="allergy-add-row">
-      <input class="allergy-add-input" id="allergyInput" type="text" placeholder="Add allergy or sensitivity…" onkeydown="if(event.key==='Enter')addAllergy()">
-      <button class="allergy-add-btn" onclick="addAllergy()">+ Add</button>
-    </div>
-
-    <!-- Medical History Wizard -->
-    <div class="profile-section-label">Medical History</div>
-    <div class="history-wizard">
-
-      <!-- Step dots -->
-      <div class="history-steps-bar">
-        <div class="history-step-dot active" id="hdot-0"></div>
-        <div class="history-step-dot" id="hdot-1"></div>
-        <div class="history-step-dot" id="hdot-2"></div>
-        <div class="history-step-dot" id="hdot-3"></div>
-        <div class="history-step-dot" id="hdot-4"></div>
-      </div>
-
-      <!-- Slides -->
-      <div class="history-slides" id="historySlides">
-
-        <!-- Step 0: Current Health -->
-        <div class="history-slide">
-          <div class="history-slide-title">Current Health Status</div>
-          <div class="history-q">
-            <label>How would you describe your overall health?</label>
-            <div class="history-checkbox-group">
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" name="health-status" value="Excellent">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Excellent — I feel great, no concerns</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" name="health-status" value="Good">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Good — minor issues occasionally</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" name="health-status" value="Fair">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Fair — managing some conditions</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" name="health-status" value="Poor">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Poor — significant health challenges</span>
-              </label>
-            </div>
-          </div>
-          <div class="history-q">
-            <label>Current medications or supplements (optional)</label>
-            <textarea id="h-medications" placeholder="e.g. Metformin 500mg, Vitamin D 2000IU…"></textarea>
-          </div>
-        </div>
-
-        <!-- Step 1: Injuries -->
-        <div class="history-slide">
-          <div class="history-slide-title">Injury History</div>
-          <div class="history-q">
-            <label>Have you experienced any significant injuries?</label>
-            <div class="history-checkbox-group">
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Bone fracture">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Bone fracture or break</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Joint injury">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Joint injury (knee, shoulder, hip…)</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Head injury">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Head or concussion injury</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Spinal injury">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Spinal or back injury</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Soft tissue">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Soft tissue (muscle, ligament, tendon)</span>
-              </label>
-            </div>
-          </div>
-          <div class="history-q">
-            <label>Additional injury details (optional)</label>
-            <textarea id="h-injuries" placeholder="Describe any injuries, when they occurred, and recovery…"></textarea>
-          </div>
-        </div>
-
-        <!-- Step 2: Surgeries -->
-        <div class="history-slide">
-          <div class="history-slide-title">Surgical History</div>
-          <div class="history-q">
-            <label>Have you had any surgeries or procedures?</label>
-            <div class="history-checkbox-group">
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Abdominal/pelvic">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Abdominal or pelvic surgery</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Orthopaedic">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Orthopaedic or joint surgery</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Cardiac">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Cardiac or cardiovascular surgery</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Neurological">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Neurological surgery</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Reproductive">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Reproductive / gynaecological surgery</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Other surgery">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Other procedure</span>
-              </label>
-            </div>
-          </div>
-          <div class="history-q">
-            <label>Surgical details (optional)</label>
-            <textarea id="h-surgeries" placeholder="Describe procedures, approximate dates, any complications…"></textarea>
-          </div>
-        </div>
-
-        <!-- Step 3: Diseases / Infections -->
-        <div class="history-slide">
-          <div class="history-slide-title">Significant Illnesses &amp; Infections</div>
-          <div class="history-q">
-            <label>Select any conditions that have significantly impacted your health</label>
-            <div class="history-checkbox-group">
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Autoimmune">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Autoimmune condition (lupus, MS, RA…)</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Endocrine">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Endocrine disorder (thyroid, PCOS, diabetes…)</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Cardiovascular">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Cardiovascular disease</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Respiratory">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Respiratory condition (asthma, COPD…)</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Infectious">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Significant infection (sepsis, Lyme, viral…)</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Mental health">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Mental health condition</span>
-              </label>
-              <label class="history-checkbox-item" onclick="toggleHCheck(this)">
-                <input type="checkbox" value="Cancer">
-                <div class="history-checkbox-box"></div>
-                <span class="history-checkbox-label">Cancer or tumour history</span>
-              </label>
-            </div>
-          </div>
-          <div class="history-q">
-            <label>Additional notes (optional)</label>
-            <textarea id="h-diseases" placeholder="Any other significant illnesses, diagnoses or infections…"></textarea>
-          </div>
-        </div>
-
-        <!-- Step 4: Review -->
-        <div class="history-slide" id="historyReviewSlide">
-          <div class="history-slide-title">Review &amp; Confirm</div>
-          <div id="historyReviewContent"></div>
-        </div>
-
-      </div><!-- /history-slides -->
-
-      <!-- Navigation -->
-      <div class="history-nav">
-        <button class="history-prev-btn" id="historyPrevBtn" onclick="historyNav(-1)" style="display:none">Back</button>
-        <button class="history-next-btn" id="historyNextBtn" onclick="historyNav(1)">Next →</button>
-      </div>
-
-    </div><!-- /history-wizard -->
-
-    <div style="height:24px"></div>
-
-  </div><!-- /profile-body -->
-
-  <!-- Save toast -->
-  <div id="profileToast">✓ Profile saved</div>
-
-</div><!-- /profileScreen -->
-
 </div><!-- /phone -->
 
 <script>
@@ -5152,6 +4762,161 @@ function msRenderTable(m, d) {
   document.getElementById('msTableEl').innerHTML = html;
 }
 
+// ── Device Sync ─────────────────────────────────────────
+var deviceOrder = ['applehealth', 'fitbit', 'oura', 'whoop'];
+var deviceInfo = {
+  applehealth: { lastSync: 'Synced 2h ago',    synced: true  },
+  fitbit:      { lastSync: 'Synced 5h ago',    synced: true  },
+  oura:        { lastSync: 'Synced yesterday', synced: true  },
+  whoop:       { lastSync: 'Not yet synced',   synced: false }
+};
+var deviceSelected = {};
+var lastSyncedList = [];
+var dsCheckSvg = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+
+function openDeviceSheet() {
+  resetDeviceSheet();
+  var overlay = document.getElementById('deviceSheetOverlay');
+  overlay.style.display = 'flex';
+  requestAnimationFrame(function() { overlay.classList.add('open'); });
+}
+
+function closeDeviceSheet() {
+  var overlay = document.getElementById('deviceSheetOverlay');
+  overlay.classList.remove('open');
+  setTimeout(function() { overlay.style.display = 'none'; }, 300);
+}
+
+function deviceOverlayClick(e) {
+  if (e.target === document.getElementById('deviceSheetOverlay')) closeDeviceSheet();
+}
+
+function setDsPhase(name) {
+  document.getElementById('dsphase-select').classList.toggle('active', name === 'select');
+  document.getElementById('dsphase-success').classList.toggle('active', name === 'success');
+}
+
+function resetDeviceSheet() {
+  setDsPhase('select');
+  document.getElementById('dsTitle').textContent = 'Sync Devices';
+  document.getElementById('dsSub').textContent = 'Select devices to sync with Oria';
+  document.getElementById('dsBtnRow').style.display = '';
+  deviceOrder.forEach(function(id) {
+    deviceSelected[id] = true;
+    var row = document.getElementById('dsRow-' + id);
+    row.classList.remove('syncing', 'synced');
+    var check = document.getElementById('dsCheck-' + id);
+    check.classList.remove('spinning');
+    check.classList.add('checked');
+    check.innerHTML = dsCheckSvg;
+    document.getElementById('dsMeta-' + id).textContent = deviceInfo[id].lastSync;
+  });
+  updateSyncSelectedLabel();
+}
+
+function toggleDevice(id) {
+  deviceSelected[id] = !deviceSelected[id];
+  var check = document.getElementById('dsCheck-' + id);
+  check.classList.toggle('checked', deviceSelected[id]);
+  check.innerHTML = deviceSelected[id] ? dsCheckSvg : '';
+  updateSyncSelectedLabel();
+}
+
+function updateSyncSelectedLabel() {
+  var n = deviceOrder.filter(function(id) { return deviceSelected[id]; }).length;
+  var btn = document.getElementById('dsSyncSelectedBtn');
+  btn.textContent = 'Sync Selected (' + n + ')';
+  btn.disabled = n === 0;
+}
+
+function startDeviceSync(all) {
+  var list = all ? deviceOrder.slice() : deviceOrder.filter(function(id) { return deviceSelected[id]; });
+  if (list.length === 0) return;
+  lastSyncedList = list;
+  document.getElementById('dsTitle').textContent = 'Syncing Devices…';
+  document.getElementById('dsSub').textContent = 'Please keep the app open';
+  document.getElementById('dsBtnRow').style.display = 'none';
+  syncNext(list, 0);
+}
+
+function syncNext(list, i) {
+  if (i >= list.length) {
+    setTimeout(function() { showDeviceSuccess(list); }, 300);
+    return;
+  }
+  var id = list[i];
+  var row = document.getElementById('dsRow-' + id);
+  var check = document.getElementById('dsCheck-' + id);
+  row.classList.add('syncing');
+  check.classList.remove('checked');
+  check.classList.add('spinning');
+  check.innerHTML = '';
+  document.getElementById('dsMeta-' + id).textContent = 'Syncing…';
+  setTimeout(function() {
+    row.classList.remove('syncing');
+    row.classList.add('synced');
+    check.classList.remove('spinning');
+    check.classList.add('checked');
+    check.innerHTML = dsCheckSvg;
+    document.getElementById('dsMeta-' + id).textContent = 'Synced just now';
+    deviceInfo[id].lastSync = 'Synced just now';
+    deviceInfo[id].synced = true;
+    syncNext(list, i + 1);
+  }, 650);
+}
+
+function showDeviceSuccess(list) {
+  setDsPhase('success');
+  document.getElementById('dsTitle').textContent = 'Sync Complete';
+  document.getElementById('dsSub').textContent = '';
+  document.getElementById('dsSuccessSub').textContent =
+    list.length + ' device' + (list.length > 1 ? 's' : '') + ' synced successfully. Your dashboard has been updated with the latest data.';
+}
+
+function finishDeviceSync() {
+  closeDeviceSheet();
+  refreshDashboardDevices(lastSyncedList);
+  refreshDashboardMetrics();
+}
+
+function refreshDashboardDevices(list) {
+  list.forEach(function(id) {
+    var badge = document.getElementById('devBadge-' + id);
+    var meta = document.getElementById('devMeta-' + id);
+    meta.textContent = 'Synced just now';
+    badge.textContent = 'Synced';
+    badge.classList.remove('badge-review');
+    badge.classList.add('badge-normal');
+  });
+  var toast = document.getElementById('syncToast');
+  document.getElementById('syncToastText').textContent =
+    'Synced ' + list.length + ' device' + (list.length > 1 ? 's' : '') + ' · just now';
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 3200);
+}
+
+function refreshDashboardMetrics() {
+  var steps = 8432 + Math.floor(Math.random() * 900 + 300);
+  var stepsDelta = 8 + Math.floor(Math.random() * 10);
+  var hr = 66 + Math.floor(Math.random() * 7);
+  var sleepH = 7, sleepM = 24 + Math.floor(Math.random() * 30);
+  if (sleepM >= 60) { sleepH += 1; sleepM -= 60; }
+  var sys = 114 + Math.floor(Math.random() * 6);
+  var dia = 72 + Math.floor(Math.random() * 6);
+
+  document.getElementById('metricVal-steps').textContent = steps.toLocaleString();
+  document.getElementById('metricDelta-steps').innerHTML = '&#8593; ' + stepsDelta + '% vs yesterday';
+  document.getElementById('metricVal-hr').innerHTML = hr + ' <span class="metric-unit">bpm</span>';
+  document.getElementById('metricVal-sleep').innerHTML = sleepH + '<span class="metric-unit">h</span> ' + sleepM + '<span class="metric-unit">m</span>';
+  document.getElementById('metricVal-bp').innerHTML = sys + '<span class="metric-unit">/' + dia + '</span>';
+
+  ['metricCard-steps', 'metricCard-hr', 'metricCard-sleep', 'metricCard-bp'].forEach(function(id) {
+    var el = document.getElementById(id);
+    el.classList.add('just-synced');
+    setTimeout(function() { el.classList.remove('just-synced'); }, 2000);
+  });
+}
+
 // ─────────────────────────────────────────────────────────
 function enterApp() {
   var ls = document.getElementById('loginScreen');
@@ -5531,204 +5296,6 @@ function closePcosAll() {
     el.classList.remove('active','done');
   });
 }
-
-
-// ══════════════════════════════════════════════════════
-//  PROFILE PAGE
-// ══════════════════════════════════════════════════════
-
-// ── Open / Close ──────────────────────────────────────
-function openProfile() {
-  document.getElementById('profileScreen').classList.add('open');
-}
-function closeProfile() {
-  document.getElementById('profileScreen').classList.remove('open');
-}
-
-// ── Photo upload ──────────────────────────────────────
-function handleProfilePhoto(input) {
-  if (!input.files || !input.files[0]) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var src = e.target.result;
-    // Big avatar
-    var bigImg = document.getElementById('profileBigImg');
-    var bigInit = document.getElementById('profileBigInitials');
-    bigImg.src = src;
-    bigImg.classList.add('loaded');
-    bigInit.style.display = 'none';
-    // App bar avatar
-    var barImg = document.getElementById('profileAvatarImg');
-    var barInit = document.getElementById('profileAvatarInitials');
-    barImg.src = src;
-    barImg.classList.add('loaded');
-    barInit.style.display = 'none';
-  };
-  reader.readAsDataURL(input.files[0]);
-}
-
-// Update initials whenever name changes
-document.addEventListener('DOMContentLoaded', function() {
-  // Init history wizard nav state
-  historyUpdateDots();
-  historyUpdateNav();
-
-  var nameInput = document.getElementById('pf-name');
-  if (nameInput) {
-    nameInput.addEventListener('input', function() {
-      var words = this.value.trim().split(/\s+/);
-      var initials = words.length >= 2
-        ? (words[0][0] + words[words.length-1][0]).toUpperCase()
-        : (words[0] ? words[0].slice(0,2).toUpperCase() : 'ME');
-      var bigInit = document.getElementById('profileBigInitials');
-      var barInit = document.getElementById('profileAvatarInitials');
-      if (bigInit && !document.getElementById('profileBigImg').classList.contains('loaded')) {
-        bigInit.textContent = initials;
-      }
-      if (barInit && !document.getElementById('profileAvatarImg').classList.contains('loaded')) {
-        barInit.textContent = initials;
-      }
-    });
-  }
-});
-
-// ── Allergies ─────────────────────────────────────────
-var _allergies = [];
-
-function renderAllergies() {
-  var container = document.getElementById('allergyChips');
-  container.innerHTML = '';
-  _allergies.forEach(function(a, i) {
-    var chip = document.createElement('div');
-    chip.className = 'allergy-chip';
-    chip.innerHTML = a + '<button class="allergy-chip-x" onclick="removeAllergy(' + i + ')">×</button>';
-    container.appendChild(chip);
-  });
-}
-
-function addAllergy() {
-  var input = document.getElementById('allergyInput');
-  var val = input.value.trim();
-  if (!val) return;
-  _allergies.push(val);
-  input.value = '';
-  renderAllergies();
-}
-
-function removeAllergy(i) {
-  _allergies.splice(i, 1);
-  renderAllergies();
-}
-
-// ── History Wizard ────────────────────────────────────
-var _historyStep = 0;
-var _historyTotal = 5;
-
-function toggleHCheck(el) {
-  // Single-select for step 0 (health status), multi for others
-  var slide = el.closest('.history-slide');
-  var slideIndex = Array.from(document.querySelectorAll('.history-slide')).indexOf(slide);
-  if (slideIndex === 0 && el.querySelector('input[name="health-status"]')) {
-    // Radio-like — uncheck siblings
-    slide.querySelectorAll('.history-checkbox-item').forEach(function(item) {
-      item.classList.remove('checked');
-      item.querySelector('input').checked = false;
-    });
-  }
-  var isChecked = el.classList.contains('checked');
-  el.classList.toggle('checked', !isChecked);
-  el.querySelector('input').checked = !isChecked;
-}
-
-function historyUpdateDots() {
-  for (var i = 0; i < _historyTotal; i++) {
-    var dot = document.getElementById('hdot-' + i);
-    if (!dot) continue;
-    dot.classList.remove('active', 'done');
-    if (i < _historyStep) dot.classList.add('done');
-    else if (i === _historyStep) dot.classList.add('active');
-  }
-}
-
-function historyUpdateNav() {
-  var prev = document.getElementById('historyPrevBtn');
-  var next = document.getElementById('historyNextBtn');
-  prev.style.display = _historyStep === 0 ? 'none' : '';
-  next.textContent = _historyStep === _historyTotal - 1 ? '✓ Done' : 'Next →';
-}
-
-function historyBuildReview() {
-  var container = document.getElementById('historyReviewContent');
-  var html = '';
-
-  // Current health
-  var healthChecked = [];
-  document.querySelectorAll('#historySlides .history-slide:nth-child(1) .history-checkbox-item.checked').forEach(function(el) {
-    healthChecked.push(el.querySelector('.history-checkbox-label').textContent.split('—')[0].trim());
-  });
-  var meds = document.getElementById('h-medications').value.trim();
-  html += '<div class="history-review-item"><div class="history-review-key">Current Health</div><div class="history-review-val">' + (healthChecked.join(', ') || 'Not specified') + '</div></div>';
-  if (meds) html += '<div class="history-review-item"><div class="history-review-key">Medications</div><div class="history-review-val">' + meds + '</div></div>';
-
-  // Injuries
-  var injuries = [];
-  document.querySelectorAll('#historySlides .history-slide:nth-child(2) .history-checkbox-item.checked').forEach(function(el) {
-    injuries.push(el.querySelector('.history-checkbox-label').textContent);
-  });
-  var injText = document.getElementById('h-injuries').value.trim();
-  html += '<div class="history-review-item"><div class="history-review-key">Injuries</div><div class="history-review-val">' + (injuries.length ? injuries.join(', ') : 'None reported') + (injText ? '<br><em>' + injText + '</em>' : '') + '</div></div>';
-
-  // Surgeries
-  var surg = [];
-  document.querySelectorAll('#historySlides .history-slide:nth-child(3) .history-checkbox-item.checked').forEach(function(el) {
-    surg.push(el.querySelector('.history-checkbox-label').textContent);
-  });
-  var surgText = document.getElementById('h-surgeries').value.trim();
-  html += '<div class="history-review-item"><div class="history-review-key">Surgeries</div><div class="history-review-val">' + (surg.length ? surg.join(', ') : 'None reported') + (surgText ? '<br><em>' + surgText + '</em>' : '') + '</div></div>';
-
-  // Diseases
-  var dis = [];
-  document.querySelectorAll('#historySlides .history-slide:nth-child(4) .history-checkbox-item.checked').forEach(function(el) {
-    dis.push(el.querySelector('.history-checkbox-label').textContent);
-  });
-  var disText = document.getElementById('h-diseases').value.trim();
-  html += '<div class="history-review-item"><div class="history-review-key">Conditions / Infections</div><div class="history-review-val">' + (dis.length ? dis.join(', ') : 'None reported') + (disText ? '<br><em>' + disText + '</em>' : '') + '</div></div>';
-
-  // Allergies
-  html += '<div class="history-review-item"><div class="history-review-key">Allergies</div><div class="history-review-val">' + (_allergies.length ? _allergies.join(', ') : 'None listed') + '</div></div>';
-
-  container.innerHTML = html;
-}
-
-function historyNav(dir) {
-  var newStep = _historyStep + dir;
-  if (newStep < 0) return;
-  if (newStep >= _historyTotal) {
-    // Done — close wizard nicely by resetting
-    _historyStep = 0;
-    historyUpdateDots();
-    historyUpdateNav();
-    document.getElementById('historySlides').style.transform = 'translateX(0)';
-    saveProfile();
-    return;
-  }
-  if (newStep === _historyTotal - 1) {
-    historyBuildReview();
-  }
-  _historyStep = newStep;
-  document.getElementById('historySlides').style.transform = 'translateX(-' + (_historyStep * 100) + '%)';
-  historyUpdateDots();
-  historyUpdateNav();
-}
-
-// ── Save Profile ──────────────────────────────────────
-function saveProfile() {
-  // In a real app, persist to backend. Here just show toast.
-  var toast = document.getElementById('profileToast');
-  toast.classList.add('show');
-  setTimeout(function() { toast.classList.remove('show'); }, 2200);
-}
-
 
 </script>
 
